@@ -130,11 +130,11 @@ The value must contain 1 occurrence of '%s' that will be
 replaced by the desired new volume level."
   :type 'string)
 
-(defcustom desktop-environment-volume-toggle-command "amixer set Master toggle|awk -F"[][]" '/Left:/ { print $4 }'"
+(defcustom desktop-environment-volume-toggle-command "amixer set Master toggle|awk -F\"[][]\" '/Left:/ {print \$4}'"
   "Shell command toggling between muted and working."
   :type 'string)
 
-(defcustom desktop-environment-volume-toggle-microphone-command "amixer set Capture toggle|awk -F"[][]" '/Left:/ { print $4 }'"
+(defcustom desktop-environment-volume-toggle-microphone-command "amixer set Capture toggle|awk -F\"[][]\" '/Left:/ { print \$4 }'"
   "Shell command toggling microphone between muted and working."
   :type 'string)
 
