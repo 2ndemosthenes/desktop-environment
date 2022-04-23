@@ -130,11 +130,19 @@ The value must contain 1 occurrence of '%s' that will be
 replaced by the desired new volume level."
   :type 'string)
 
-(defcustom desktop-environment-volume-toggle-command "amixer set Master toggle|awk -F\"[][]\" '/Left:/ {print \$4}'"
+(defcustom desktop-environment-volume-toggle-command "amixer set Master toggle"
   "Shell command toggling between muted and working."
   :type 'string)
 
-(defcustom desktop-environment-volume-toggle-microphone-command "amixer set Capture toggle|awk -F\"[][]\" '/Left:/ { print \$4 }'"
+(defcustom desktop-environment-volume-get-state-regexp "\\[on]\\|\\[off]"
+  "Regular expression matching volume state.
+
+This regular expression will be tested against the result of
+`desktop-environment-volume-get-state-command' and group 1 must
+match the current volume state."
+  :type 'regexp)
+
+(defcustom desktop-environment-volume-toggle-microphone-command "amixer set Capture toggle"
   "Shell command toggling microphone between muted and working."
   :type 'string)
 
@@ -358,14 +366,20 @@ replacing the placeholder %d with the prefix argument."
   "Toggle between muted and un-muted."
   (interactive)
   (message "Volume %s"
-           (desktop-environment--shell-command-to-string desktop-environment-volume-toggle-command)))
+           (let ((output (desktop-environment--shell-command-to-string desktop-environment-volume-toggle-command)))
+             (save-match-data
+               (string-match desktop-environment-volume-get-state-regexp output)
+               (match-string 0 output)))))
 
 ;;;###autoload
 (defun desktop-environment-toggle-microphone-mute ()
   "Toggle microphone between muted and un-muted."
   (interactive)
   (message "Microphone volume %s"
-           (desktop-environment--shell-command-to-string desktop-environment-volume-toggle-microphone-command)))
+           (let ((output (desktop-environment--shell-command-to-string desktop-environment-volume-toggle-microphone-command)))
+             (save-match-data
+               (string-match desktop-environment-volume-get-state-regexp output)
+               (match-string 0 output)))))
 
 
 ;;; Commands - keyboard backlight
