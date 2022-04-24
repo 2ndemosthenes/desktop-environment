@@ -131,14 +131,16 @@ replaced by the desired new volume level."
   :type 'string)
 
 (defcustom desktop-environment-volume-toggle-command "amixer set Master toggle"
-  "Shell command toggling between muted and working."
+  "Shell command toggling between muted and working.
+If you change this variable, you might want to change
+`desktop-environment-volume-get-state-regexp' as well."
   :type 'string)
 
-(defcustom desktop-environment-volume-get-state-regexp "\\[on]\\|\\[off]"
-  "Regular expression matching volume state.
+(defcustom desktop-environment-volume-toggle-regexp "\\[on]\\|\\[off]"
+  "Regular expression matching volume state (mute or working).
 
 This regular expression will be tested against the result of
-`desktop-environment-volume-get-state-command' and group 1 must
+`desktop-environment-volume-toggle-command' and `desktop-environment-volume-toggle-microphone-command' and group 0 must
 match the current volume state."
   :type 'regexp)
 
@@ -365,7 +367,7 @@ replacing the placeholder %d with the prefix argument."
 (defun desktop-environment-toggle-mute ()
   "Toggle between muted and un-muted."
   (interactive)
-  (message "Volume %s"
+  (message "Sound %s"
            (let ((output (desktop-environment--shell-command-to-string desktop-environment-volume-toggle-command)))
              (save-match-data
                (string-match desktop-environment-volume-get-state-regexp output)
@@ -375,7 +377,7 @@ replacing the placeholder %d with the prefix argument."
 (defun desktop-environment-toggle-microphone-mute ()
   "Toggle microphone between muted and un-muted."
   (interactive)
-  (message "Microphone volume %s"
+  (message "Mic %s"
            (let ((output (desktop-environment--shell-command-to-string desktop-environment-volume-toggle-microphone-command)))
              (save-match-data
                (string-match desktop-environment-volume-get-state-regexp output)
